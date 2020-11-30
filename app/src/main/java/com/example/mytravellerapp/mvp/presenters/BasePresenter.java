@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-
 import com.example.mytravellerapp.BaseApplication;
 import com.example.mytravellerapp.common.constants.ApplicationConstants;
 import com.example.mytravellerapp.common.constants.IPreferencesKeys;
@@ -12,6 +11,7 @@ import com.example.mytravellerapp.domain.Service;
 import com.example.mytravellerapp.model.rest.exceptions.RetrofitException;
 import com.example.mytravellerapp.mvp.views.View;
 import com.example.mytravellerapp.utils.IScheduler;
+
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -30,7 +30,7 @@ public abstract class BasePresenter implements Presenter {
     private String access_token;
     private String user_id;
 
-    protected BasePresenter(Activity activityContext, Service pService, IScheduler scheduler){
+    protected BasePresenter(Activity activityContext, Service pService, IScheduler scheduler) {
         this.activity = activityContext;
         this.mService = pService;
         this.scheduler = scheduler;
@@ -45,8 +45,10 @@ public abstract class BasePresenter implements Presenter {
             Context mContext = BaseApplication.getBaseApplication();
             SharedPreferences preferences = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
             String token = "Bearer " + preferences.getString(IPreferencesKeys.ACCESS_TOKEN, "");
+
             return token;
         } else {
+
             return "Bearer " + access_token;
         }
     }
@@ -63,27 +65,35 @@ public abstract class BasePresenter implements Presenter {
     }
 
     public String getUserId() {
-        SharedPreferences prefs = BaseApplication.getBaseApplication().getSharedPreferences("com.eyepax.traveller", Context.MODE_PRIVATE);
-        String pref = prefs.getString(USER_ID,"default");
+        SharedPreferences prefs = BaseApplication.getBaseApplication().getSharedPreferences("com.example.mytravellerapp", Context.MODE_PRIVATE);
+        String pref = prefs.getString(USER_ID, "default");
+
         return pref;
     }
 
     @Override
-    public void onCreate() {}
+    public void onCreate() {
+    }
 
     @Override
-    public void onStart() {}
+    public void onStart() {
+    }
 
     @Override
-    public void onStop() {}
+    public void onStop() {
+    }
+
+
+
+    @Override
+    public void onDestroy() {
+        disposable.dispose();
+    }
 
     @Override
     public void attachView(View v) {
         mView =  v;
     }
 
-    @Override
-    public void onDestroy() {
-        disposable.dispose();
-    }
+
 }
